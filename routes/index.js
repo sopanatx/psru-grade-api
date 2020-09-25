@@ -285,17 +285,21 @@ router.get("/api/class/:id", async function (req, res) {
               ).each((indexroom, elementroom) => {
                 const mondayClass = $(
                   ` body > center > table > tbody > tr:nth-child(${i}) > td:nth-child(3)`
-                ).each((indexclass, elementclass) =>
-                  //  console.log('Element Subject: %s  Element Time: %s Element SubjectName: %s  Element Classroom : %s', $(elementsubcode).text(), formattedTime, $(elementclass).text(), $(elementroom).text())
-                  monday.push(
-                    Object.assign({
-                      subjectCode: $(elementsubcode).text(),
-                      subjectName: $(elementclass).text(),
-                      subjectClassroom: $(elementroom).text(),
-                      subjectTime: formattedTime,
-                    })
-                  )
-                );
+                ).each((indexclass, elementclass) => {
+                  const mondayTeacher = $(
+                    ` body > center > table > tbody > tr:nth-child(${i}) > td:nth-child(11)`
+                  ).each((indexteacher, elementteacher) => {
+                    monday.push(
+                      Object.assign({
+                        subjectCode: $(elementsubcode).text(),
+                        subjectName: $(elementclass).text(),
+                        subjectClassroom: $(elementroom).text(),
+                        subjectTime: formattedTime,
+                        subjectTeacher: $(elementteacher).text(),
+                      })
+                    );
+                  });
+                });
               });
             });
           }
@@ -319,17 +323,21 @@ router.get("/api/class/:id", async function (req, res) {
               ).each((indexroom, elementroom) => {
                 const tuesdayClass = $(
                   ` body > center > table > tbody > tr:nth-child(${i}) > td:nth-child(3)`
-                ).each((indexclass, elementclass) =>
-                  //  console.log('Element Subject: %s  Element Time: %s Element SubjectName: %s  Element Classroom : %s', $(elementsubcode).text(), formattedTime, $(elementclass).text(), $(elementroom).text())
-                  tuesday.push(
-                    Object.assign({
-                      subjectCode: $(elementsubcode).text(),
-                      subjectName: $(elementclass).text(),
-                      subjectClassroom: $(elementroom).text(),
-                      subjectTime: formattedTime,
-                    })
-                  )
-                );
+                ).each((indexclass, elementclass) => {
+                  const tuesdayTeacher = $(
+                    ` body > center > table > tbody > tr:nth-child(${i}) > td:nth-child(11)`
+                  ).each((indexteacher, elementteacher) => {
+                    tuesday.push(
+                      Object.assign({
+                        subjectCode: $(elementsubcode).text(),
+                        subjectName: $(elementclass).text(),
+                        subjectClassroom: $(elementroom).text(),
+                        subjectTime: formattedTime,
+                        subjectTeacher: $(elementteacher).text(),
+                      })
+                    );
+                  });
+                });
               });
             });
           }
@@ -353,17 +361,21 @@ router.get("/api/class/:id", async function (req, res) {
               ).each((indexroom, elementroom) => {
                 const wednesdayClass = $(
                   ` body > center > table > tbody > tr:nth-child(${i}) > td:nth-child(3)`
-                ).each((indexclass, elementclass) =>
-                  //  console.log('Element Subject: %s  Element Time: %s Element SubjectName: %s  Element Classroom : %s', $(elementsubcode).text(), formattedTime, $(elementclass).text(), $(elementroom).text())
-                  wednesday.push(
-                    Object.assign({
-                      subjectCode: $(elementsubcode).text(),
-                      subjectName: $(elementclass).text(),
-                      subjectClassroom: $(elementroom).text(),
-                      subjectTime: formattedTime,
-                    })
-                  )
-                );
+                ).each((indexclass, elementclass) => {
+                  const wednesdayTeacher = $(
+                    ` body > center > table > tbody > tr:nth-child(${i}) > td:nth-child(11)`
+                  ).each((indexteacher, elementteacher) => {
+                    wednesday.push(
+                      Object.assign({
+                        subjectCode: $(elementsubcode).text(),
+                        subjectName: $(elementclass).text(),
+                        subjectClassroom: $(elementroom).text(),
+                        subjectTime: formattedTime,
+                        subjectTeacher: $(elementteacher).text(),
+                      })
+                    );
+                  });
+                });
               });
             });
           }
@@ -386,17 +398,21 @@ router.get("/api/class/:id", async function (req, res) {
               ).each((indexroom, elementroom) => {
                 const thursdayClass = $(
                   ` body > center > table > tbody > tr:nth-child(${i}) > td:nth-child(3)`
-                ).each((indexclass, elementclass) =>
-                  //  console.log('Element Subject: %s  Element Time: %s Element SubjectName: %s  Element Classroom : %s', $(elementsubcode).text(), formattedTime, $(elementclass).text(), $(elementroom).text())
-                  thursday.push(
-                    Object.assign({
-                      subjectCode: $(elementsubcode).text(),
-                      subjectName: $(elementclass).text(),
-                      subjectClassroom: $(elementroom).text(),
-                      subjectTime: formattedTime,
-                    })
-                  )
-                );
+                ).each((indexclass, elementclass) => {
+                  const thursdayTeacher = $(
+                    ` body > center > table > tbody > tr:nth-child(${i}) > td:nth-child(11)`
+                  ).each((indexteacher, elementteacher) => {
+                    thursday.push(
+                      Object.assign({
+                        subjectCode: $(elementsubcode).text(),
+                        subjectName: $(elementclass).text(),
+                        subjectClassroom: $(elementroom).text(),
+                        subjectTime: formattedTime,
+                        subjectTeacher: $(elementteacher).text(),
+                      })
+                    );
+                  });
+                });
               });
             });
           }
@@ -421,14 +437,21 @@ router.get("/api/class/:id", async function (req, res) {
                   ` body > center > table > tbody > tr:nth-child(${i}) > td:nth-child(3)`
                 ).each((indexclass, elementclass) =>
                   //  console.log('Element Subject: %s  Element Time: %s Element SubjectName: %s  Element Classroom : %s', $(elementsubcode).text(), formattedTime, $(elementclass).text(), $(elementroom).text())
-                  friday.push(
-                    Object.assign({
-                      subjectCode: $(elementsubcode).text(),
-                      subjectName: $(elementclass).text(),
-                      subjectClassroom: $(elementroom).text(),
-                      subjectTime: formattedTime,
-                    })
-                  )
+                  {
+                    const fridayTeacher = $(
+                      ` body > center > table > tbody > tr:nth-child(${i}) > td:nth-child(11)`
+                    ).each((indexteacher, elementteacher) => {
+                      friday.push(
+                        Object.assign({
+                          subjectCode: $(elementsubcode).text(),
+                          subjectName: $(elementclass).text(),
+                          subjectClassroom: $(elementroom).text(),
+                          subjectTime: formattedTime,
+                          subjectTeacher: $(elementteacher).text(),
+                        })
+                      );
+                    });
+                  }
                 );
               });
             });
