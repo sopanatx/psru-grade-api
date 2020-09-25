@@ -6,9 +6,7 @@ const queryString = require("query-string");
 const iconv = require("iconv-lite");
 const cheerio = require("cheerio");
 const HtmlTableToJson = require("html-table-to-json");
-const {
-  json
-} = require("express");
+const { json } = require("express");
 /* GET home page. */
 router.get("/", function (req, res, next) {
   res.render("index", {
@@ -156,6 +154,101 @@ router.get("/api/class/:id", async function (req, res) {
 
   console.log("[Request_Params: %s]", req.params.id);
 
+  function filterClassDay(day) {
+    switch (day) {
+      case 1:
+        return "จันทร์";
+        break;
+      case 2:
+        return "อังคาร";
+        break;
+      case 3:
+        return "พุธ";
+        break;
+      case 4:
+        return "พฤหัสบดี";
+        break;
+      case 5:
+        return "ศุกร์";
+        break;
+    }
+  }
+
+  function convertPeriod1(period1) {
+    if (period1 == "") {
+      return "Nodata";
+    }
+
+    switch (period1) {
+      case "1":
+        return "08:30";
+      case "2":
+        return "09:30";
+      case "3":
+        return "10.30";
+      case "4":
+        return "11:30";
+      case "5":
+        return "12:30";
+      case "6":
+        return "13:30";
+      case "7":
+        return "14:30";
+      case "8":
+        return "15:30";
+      case "9":
+        return "16:30";
+      case "10":
+        return "17:30";
+    }
+  }
+
+  function convertPeriod2(period2) {
+    if (period2 == "") {
+      return "Nodata";
+    }
+
+    switch (period2) {
+      case "1":
+        return "08:30";
+      case "2":
+        return "09:30";
+      case "3":
+        return "10.30";
+      case "4":
+        return "11:30";
+      case "5":
+        return "12:30";
+      case "6":
+        return "13:30";
+      case "7":
+        return "14:30";
+      case "8":
+        return "15:30";
+      case "9":
+        return "16:30";
+      case "10":
+        return "17:30";
+    }
+  }
+
+  let mondaytime = [];
+  let tuesdaytime = [];
+
+  function myTrim(x) {
+    return x.replace(/^\s+|\s+$/gm, " ");
+  }
+  const classTimeTable = [];
+
+  function filterClassroom(data) {
+    console.log(data);
+    if (myTrim(data) == " " || myTrim(data) == "") {
+      return "ไม่มีข้อมูลห้องเรียน";
+    } else {
+      return data;
+    }
+  }
+
   const requestBody = {
     ID_NO: req.params.id,
   };
@@ -166,25 +259,50 @@ router.get("/api/class/:id", async function (req, res) {
       queryString.stringify(requestBody)
     )
     .then((result) => {
+      const $ = cheerio.load(result.data);
 
-      const $ = cheerio.load(result.data)
-      const mondayTime = []
-      const monday = $('body > center > table > tbody > tr:nth-child(3) > td:nth-child(6)')
-        .each((index, element) => {
-          if ($(element).text().trim() == '') {
-            element == 'null'
+      const monday = [];
+      for (let i = 3; i < 14; i++) {
+        const monday3 = $(
+          `body > center > table > tbody > tr:nth-child(${i}) > td:nth-child(6)`
+        ).each((index, element) => {
+          if ($(element).text().trim() == "") {
+            element == "null";
+          } else {
+            const formattedTime = `จันทร์ ${convertPeriod1(
+              $(element).text().substr(0, 1)
+            )} - ${convertPeriod2($(element).text().substr(2, 3))}`;
+            console.log();
+
+            const mondaySubID = $(
+              `body > center > table > tbody > tr:nth-child(${i}) > td:nth-child(1)`
+            ).each((indexsubcode, elementsubcode) => {
+              const mondayClassroom = $(
+                ` body > center > table > tbody > tr:nth-child(${i}) > td:nth-child(5)`
+              ).each((indexroom, elementroom) => {
+                const mondayClass = $(
+                  ` body > center > table > tbody > tr:nth-child(${i}) > td:nth-child(3)`
+                ).each((indexclass, elementclass) =>
+                  //  console.log('Element Subject: %s  Element Time: %s Element SubjectName: %s  Element Classroom : %s', $(elementsubcode).text(), formattedTime, $(elementclass).text(), $(elementroom).text())
+                  monday.push(
+                    Object.assign({
+                      subjectCode: $(elementsubcode).text(),
+                      subjectName: $(elementclass).text(),
+                      subjectClassroom: $(elementroom).text(),
+                      subjectTime: formattedTime,
+                    })
+                  )
+                );
+              });
+            });
           }
-          const mondayClassSubID = $('body > center > table > tbody > tr:nth-child(3) > td:nth-child(1)')
-            .each((indexsubcode, elementsubcode) => {
-              const mondayClass = $('body > center > table > tbody > tr:nth-child(3) > td:nth-child(3)')
-                .each((indexclass, elementclass) =>
-                  console.log('Element Subject: %s  Element Time :%s Element SubjectName: %s', $(elementsubcode).text(), $(element).text(), $(elementclass).text())
-                )
-            })
+        });
+      }
 
-
-
-        })
+      //send data to user
+      res.send({
+        monday: monday,
+      });
     });
 });
 
