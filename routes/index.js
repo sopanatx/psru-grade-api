@@ -301,7 +301,7 @@ router.get("/api/class/:id", async function (req, res) {
           }
         }); //end monday3
 
-        const tueday3 = $(
+        const tuesday3 = $(
           `body > center > table > tbody > tr:nth-child(${i}) > td:nth-child(7)`
         ).each((index, element) => {
           if ($(element).text().trim() == "") {
