@@ -262,6 +262,10 @@ router.get("/api/class/:id", async function (req, res) {
       const $ = cheerio.load(result.data);
 
       const monday = [];
+      const tuesday = [];
+      const wednesday = [];
+      const thursday = [];
+      const friday = [];
       for (let i = 3; i < 14; i++) {
         const monday3 = $(
           `body > center > table > tbody > tr:nth-child(${i}) > td:nth-child(6)`
@@ -272,7 +276,6 @@ router.get("/api/class/:id", async function (req, res) {
             const formattedTime = `จันทร์ ${convertPeriod1(
               $(element).text().substr(0, 1)
             )} - ${convertPeriod2($(element).text().substr(2, 3))}`;
-            console.log();
 
             const mondaySubID = $(
               `body > center > table > tbody > tr:nth-child(${i}) > td:nth-child(1)`
@@ -296,12 +299,150 @@ router.get("/api/class/:id", async function (req, res) {
               });
             });
           }
-        });
+        }); //end monday3
+
+        const tueday3 = $(
+          `body > center > table > tbody > tr:nth-child(${i}) > td:nth-child(7)`
+        ).each((index, element) => {
+          if ($(element).text().trim() == "") {
+            element == "null";
+          } else {
+            const formattedTime = `อังคาร ${convertPeriod1(
+              $(element).text().substr(0, 1)
+            )} - ${convertPeriod2($(element).text().substr(2, 3))}`;
+
+            const tuesdaySubID = $(
+              `body > center > table > tbody > tr:nth-child(${i}) > td:nth-child(1)`
+            ).each((indexsubcode, elementsubcode) => {
+              const tuesdayClassroom = $(
+                ` body > center > table > tbody > tr:nth-child(${i}) > td:nth-child(5)`
+              ).each((indexroom, elementroom) => {
+                const tuesdayClass = $(
+                  ` body > center > table > tbody > tr:nth-child(${i}) > td:nth-child(3)`
+                ).each((indexclass, elementclass) =>
+                  //  console.log('Element Subject: %s  Element Time: %s Element SubjectName: %s  Element Classroom : %s', $(elementsubcode).text(), formattedTime, $(elementclass).text(), $(elementroom).text())
+                  tuesday.push(
+                    Object.assign({
+                      subjectCode: $(elementsubcode).text(),
+                      subjectName: $(elementclass).text(),
+                      subjectClassroom: $(elementroom).text(),
+                      subjectTime: formattedTime,
+                    })
+                  )
+                );
+              });
+            });
+          }
+        }); //end tuesday3
+
+        const wednesday3 = $(
+          `body > center > table > tbody > tr:nth-child(${i}) > td:nth-child(8)`
+        ).each((index, element) => {
+          if ($(element).text().trim() == "") {
+            element == "null";
+          } else {
+            const formattedTime = `พุธ ${convertPeriod1(
+              $(element).text().substr(0, 1)
+            )} - ${convertPeriod2($(element).text().substr(2, 3))}`;
+
+            const wednesdaySubID = $(
+              `body > center > table > tbody > tr:nth-child(${i}) > td:nth-child(1)`
+            ).each((indexsubcode, elementsubcode) => {
+              const wednesdayClassroom = $(
+                ` body > center > table > tbody > tr:nth-child(${i}) > td:nth-child(5)`
+              ).each((indexroom, elementroom) => {
+                const wednesdayClass = $(
+                  ` body > center > table > tbody > tr:nth-child(${i}) > td:nth-child(3)`
+                ).each((indexclass, elementclass) =>
+                  //  console.log('Element Subject: %s  Element Time: %s Element SubjectName: %s  Element Classroom : %s', $(elementsubcode).text(), formattedTime, $(elementclass).text(), $(elementroom).text())
+                  wednesday.push(
+                    Object.assign({
+                      subjectCode: $(elementsubcode).text(),
+                      subjectName: $(elementclass).text(),
+                      subjectClassroom: $(elementroom).text(),
+                      subjectTime: formattedTime,
+                    })
+                  )
+                );
+              });
+            });
+          }
+        }); //end wednesday3
+
+        const thursday3 = $(
+          `body > center > table > tbody > tr:nth-child(${i}) > td:nth-child(9)`
+        ).each((index, element) => {
+          if ($(element).text().trim() == "") {
+            element == "null";
+          } else {
+            const formattedTime = `พฤหัสบดี ${convertPeriod1(
+              $(element).text().substr(0, 1)
+            )} - ${convertPeriod2($(element).text().substr(2, 3))}`;
+            const thursdaySubID = $(
+              `body > center > table > tbody > tr:nth-child(${i}) > td:nth-child(1)`
+            ).each((indexsubcode, elementsubcode) => {
+              const thursdayClassroom = $(
+                ` body > center > table > tbody > tr:nth-child(${i}) > td:nth-child(5)`
+              ).each((indexroom, elementroom) => {
+                const thursdayClass = $(
+                  ` body > center > table > tbody > tr:nth-child(${i}) > td:nth-child(3)`
+                ).each((indexclass, elementclass) =>
+                  //  console.log('Element Subject: %s  Element Time: %s Element SubjectName: %s  Element Classroom : %s', $(elementsubcode).text(), formattedTime, $(elementclass).text(), $(elementroom).text())
+                  thursday.push(
+                    Object.assign({
+                      subjectCode: $(elementsubcode).text(),
+                      subjectName: $(elementclass).text(),
+                      subjectClassroom: $(elementroom).text(),
+                      subjectTime: formattedTime,
+                    })
+                  )
+                );
+              });
+            });
+          }
+        }); //end thursday3
+
+        const friday3 = $(
+          `body > center > table > tbody > tr:nth-child(${i}) > td:nth-child(9)`
+        ).each((index, element) => {
+          if ($(element).text().trim() == "") {
+            element == "null";
+          } else {
+            const formattedTime = `ศุกร์ ${convertPeriod1(
+              $(element).text().substr(0, 1)
+            )} - ${convertPeriod2($(element).text().substr(2, 3))}`;
+            const fridaySubID = $(
+              `body > center > table > tbody > tr:nth-child(${i}) > td:nth-child(1)`
+            ).each((indexsubcode, elementsubcode) => {
+              const fridayClassroom = $(
+                ` body > center > table > tbody > tr:nth-child(${i}) > td:nth-child(5)`
+              ).each((indexroom, elementroom) => {
+                const fridayClass = $(
+                  ` body > center > table > tbody > tr:nth-child(${i}) > td:nth-child(3)`
+                ).each((indexclass, elementclass) =>
+                  //  console.log('Element Subject: %s  Element Time: %s Element SubjectName: %s  Element Classroom : %s', $(elementsubcode).text(), formattedTime, $(elementclass).text(), $(elementroom).text())
+                  friday.push(
+                    Object.assign({
+                      subjectCode: $(elementsubcode).text(),
+                      subjectName: $(elementclass).text(),
+                      subjectClassroom: $(elementroom).text(),
+                      subjectTime: formattedTime,
+                    })
+                  )
+                );
+              });
+            });
+          }
+        }); //end friday3
       }
 
       //send data to user
       res.send({
         monday: monday,
+        tuesday: tuesday,
+        wednesday: wednesday,
+        thursday: thursday,
+        friday: friday,
       });
     });
 });
