@@ -1,5 +1,5 @@
-var express = require("express");
-var router = express.Router();
+const express = require("express");
+const router = express.Router();
 const getGrade = require("../service/getGrade");
 const axios = require("axios");
 const queryString = require("query-string");
@@ -14,7 +14,7 @@ router.get("/", function (req, res, next) {
   });
 });
 
-router.get("/grade/:id", function (req, res) {
+router.get("/grade/:id", async (req, res)=> {
   console.log(req.params);
   const requestBody = {
     ID_NO: req.params.id,
@@ -31,15 +31,18 @@ router.get("/grade/:id", function (req, res) {
     responseEncoding: "binary",
   };
 
-  const studentGrade = axios
+   try {
+    const {data:studentGrade} = await axios
     .post(
       "http://202.29.80.113/cgi/LstGrade1.pl",
       queryString.stringify(requestBody),
       config
     )
-    .then((result) => {
-      res.status(200).send(iconv.decode(new Buffer(result.data), "TIS-620"));
-    });
+    res.status(200).send(iconv.decode(new Buffer(studentGrade), "TIS-620"));
+   } catch (error) {
+     res.status(500).send("StudentGrade Request Fail")
+   }
+  
 });
 
 router.get("/activity/:id", function (req, res) {
