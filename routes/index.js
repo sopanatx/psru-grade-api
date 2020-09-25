@@ -403,7 +403,7 @@ router.get("/api/class/:id", async function (req, res) {
         }); //end thursday3
 
         const friday3 = $(
-          `body > center > table > tbody > tr:nth-child(${i}) > td:nth-child(9)`
+          `body > center > table > tbody > tr:nth-child(${i}) > td:nth-child(10)`
         ).each((index, element) => {
           if ($(element).text().trim() == "") {
             element == "null";
