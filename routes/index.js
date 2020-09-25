@@ -6,9 +6,7 @@ const queryString = require("query-string");
 const iconv = require("iconv-lite");
 const cheerio = require("cheerio");
 const HtmlTableToJson = require("html-table-to-json");
-const {
-  json
-} = require("express");
+const { json } = require("express");
 /* GET home page. */
 router.get("/", function (req, res, next) {
   res.render("index", {
@@ -252,15 +250,13 @@ router.get("/api/class/:id", async function (req, res) {
         }
       }
 
-      let mondaytime = []
-      let tuesdaytime = []
+      let mondaytime = [];
+      let tuesdaytime = [];
 
       function myTrim(x) {
         return x.replace(/^\s+|\s+$/gm, " ");
       }
       const classTimeTable = [];
-
-
 
       function filterClassroom(data) {
         console.log(data);
@@ -517,73 +513,70 @@ router.get("/api/class/:id", async function (req, res) {
         `body > center > table > tbody > tr:nth-child(14) > td:nth-child(6)`
       );
 
-
-
       const subjectTuesDay3 = $(
-        `body > center > table > tbody > tr:nth-child(3) > td:nth-child(6)`
+        `body > center > table > tbody > tr:nth-child(3) > td:nth-child(7)`
       );
       const subjectTuesDay4 = $(
-        `body > center > table > tbody > tr:nth-child(4) > td:nth-child(6)`
+        `body > center > table > tbody > tr:nth-child(4) > td:nth-child(7)`
       );
       const subjectTuesDay5 = $(
-        `body > center > table > tbody > tr:nth-child(5) > td:nth-child(6)`
+        `body > center > table > tbody > tr:nth-child(5) > td:nth-child(7)`
       );
       const subjectTuesDay6 = $(
-        `body > center > table > tbody > tr:nth-child(6) > td:nth-child(6)`
+        `body > center > table > tbody > tr:nth-child(6) > td:nth-child(7)`
       );
       const subjectTuesDay7 = $(
-        `body > center > table > tbody > tr:nth-child(7) > td:nth-child(6)`
+        `body > center > table > tbody > tr:nth-child(7) > td:nth-child(7)`
       );
       const subjectTuesDay8 = $(
-        `body > center > table > tbody > tr:nth-child(8) > td:nth-child(6)`
+        `body > center > table > tbody > tr:nth-child(8) > td:nth-child(7)`
       );
       const subjectTuesDay9 = $(
-        `body > center > table > tbody > tr:nth-child(9) > td:nth-child(6)`
+        `body > center > table > tbody > tr:nth-child(9) > td:nth-child(7)`
       );
       const subjectTuesDay10 = $(
-        `body > center > table > tbody > tr:nth-child(10) > td:nth-child(6)`
+        `body > center > table > tbody > tr:nth-child(10) > td:nth-child(7)`
       );
       const subjectTuesDay11 = $(
-        `body > center > table > tbody > tr:nth-child(11) > td:nth-child(6)`
+        `body > center > table > tbody > tr:nth-child(11) > td:nth-child(7)`
       );
       const subjectTuesDay12 = $(
-        `body > center > table > tbody > tr:nth-child(12) > td:nth-child(6)`
+        `body > center > table > tbody > tr:nth-child(12) > td:nth-child(7)`
       );
       const subjectTuesDay13 = $(
-        `body > center > table > tbody > tr:nth-child(13) > td:nth-child(6)`
+        `body > center > table > tbody > tr:nth-child(13) > td:nth-child(7)`
       );
       const subjectTuesDay14 = $(
-        `body > center > table > tbody > tr:nth-child(14) > td:nth-child(6)`
+        `body > center > table > tbody > tr:nth-child(14) > td:nth-child(7)`
       );
       const subjectClassTime = [];
-      subjectClassTime.push(filterClassTime($(subjectMonday3).text(), 1, 0))
-      subjectClassTime.push(filterClassTime($(subjectMonday4).text(), 1, 1))
-      subjectClassTime.push(filterClassTime($(subjectMonday5).text(), 1, 2))
-      subjectClassTime.push(filterClassTime($(subjectMonday6).text(), 1, 3))
-      subjectClassTime.push(filterClassTime($(subjectMonday7).text(), 1, 4))
-      subjectClassTime.push(filterClassTime($(subjectMonday8).text(), 1, 5))
-      subjectClassTime.push(filterClassTime($(subjectMonday9).text(), 1, 6))
-      subjectClassTime.push(filterClassTime($(subjectMonday10).text(), 1, 7))
-      subjectClassTime.push(filterClassTime($(subjectMonday11).text(), 1, 8))
-      subjectClassTime.push(filterClassTime($(subjectMonday12).text(), 1, 9))
-      subjectClassTime.push(filterClassTime($(subjectMonday13).text(), 1, 10))
-      subjectClassTime.push(filterClassTime($(subjectMonday14).text(), 1, 11))
+      subjectClassTime.push(filterClassTime($(subjectMonday3).text(), 1, 0));
+      subjectClassTime.push(filterClassTime($(subjectMonday4).text(), 1, 1));
+      subjectClassTime.push(filterClassTime($(subjectMonday5).text(), 1, 2));
+      subjectClassTime.push(filterClassTime($(subjectMonday6).text(), 1, 3));
+      subjectClassTime.push(filterClassTime($(subjectMonday7).text(), 1, 4));
+      subjectClassTime.push(filterClassTime($(subjectMonday8).text(), 1, 5));
+      subjectClassTime.push(filterClassTime($(subjectMonday9).text(), 1, 6));
+      subjectClassTime.push(filterClassTime($(subjectMonday10).text(), 1, 7));
+      subjectClassTime.push(filterClassTime($(subjectMonday11).text(), 1, 8));
+      subjectClassTime.push(filterClassTime($(subjectMonday12).text(), 1, 9));
+      subjectClassTime.push(filterClassTime($(subjectMonday13).text(), 1, 10));
+      subjectClassTime.push(filterClassTime($(subjectMonday14).text(), 1, 11));
 
-      subjectClassTime.push(filterClassTime($(subjectTuesDay3).text(), 2, 12))
-      subjectClassTime.push(filterClassTime($(subjectTuesDay4).text(), 2, 13))
-      subjectClassTime.push(filterClassTime($(subjectTuesDay5).text(), 2, 14))
-      subjectClassTime.push(filterClassTime($(subjectTuesDay6).text(), 2, 15))
-      subjectClassTime.push(filterClassTime($(subjectTuesDay7).text(), 2, 16))
-      subjectClassTime.push(filterClassTime($(subjectTuesDay8).text(), 2, 17))
-      subjectClassTime.push(filterClassTime($(subjectTuesDay9).text(), 2, 18))
-      subjectClassTime.push(filterClassTime($(subjectTuesDay10).text(), 2, 19))
-      subjectClassTime.push(filterClassTime($(subjectTuesDay11).text(), 2, 20))
-      subjectClassTime.push(filterClassTime($(subjectTuesDay12).text(), 2, 21))
-      subjectClassTime.push(filterClassTime($(subjectTuesDay13).text(), 2, 22))
-      subjectClassTime.push(filterClassTime($(subjectTuesDay14).text(), 2, 23))
+      subjectClassTime.push(filterClassTime($(subjectTuesDay3).text(), 2, 12));
+      subjectClassTime.push(filterClassTime($(subjectTuesDay4).text(), 2, 13));
+      subjectClassTime.push(filterClassTime($(subjectTuesDay5).text(), 2, 14));
+      subjectClassTime.push(filterClassTime($(subjectTuesDay6).text(), 2, 15));
+      subjectClassTime.push(filterClassTime($(subjectTuesDay7).text(), 2, 16));
+      subjectClassTime.push(filterClassTime($(subjectTuesDay8).text(), 2, 17));
+      subjectClassTime.push(filterClassTime($(subjectTuesDay9).text(), 2, 18));
+      subjectClassTime.push(filterClassTime($(subjectTuesDay10).text(), 2, 19));
+      subjectClassTime.push(filterClassTime($(subjectTuesDay11).text(), 2, 20));
+      subjectClassTime.push(filterClassTime($(subjectTuesDay12).text(), 2, 21));
+      subjectClassTime.push(filterClassTime($(subjectTuesDay13).text(), 2, 22));
+      subjectClassTime.push(filterClassTime($(subjectTuesDay14).text(), 2, 23));
 
-
-      console.log(subjectClassTime)
+      console.log(subjectClassTime);
       const filteredSubjectCode = subjectCode.filter(function (e) {
         return e.trim();
       });
@@ -598,15 +591,11 @@ router.get("/api/class/:id", async function (req, res) {
         return e.trim();
       });
 
-
       const ClassTime = [];
-
-
-
 
       function filterClassTime(period, day, index) {
         if (myTrim(period) == " " || myTrim(period) == "" || period == []) {
-          return '';
+          return "";
         }
         const period1 = period.substring(0, 1);
         const period2 = period.substring(2, 3);
@@ -614,11 +603,10 @@ router.get("/api/class/:id", async function (req, res) {
         const convertP2 = convertPeriod2(period2);
         const classday = filterClassDay(day);
         const result = `Index:${index}  ${classday} ${convertP1} - ${convertP2}`;
-        subjectClassTime[index] = result
-        console.log('index: %s Data: %s', index, result)
-        return ''
+        subjectClassTime[index] = result;
+        console.log("index: %s Data: %s", index, result);
+        return "";
       }
-
 
       for (var i = 0; i < filteredSubjectCode.length; i++) {
         ClassTime.push(
@@ -628,7 +616,7 @@ router.get("/api/class/:id", async function (req, res) {
             section: filteredSubjectSection[i],
             subjectName: filteredSubjectName[i],
             classroom: filteredSubjectClassroom[i],
-            time: subjectClassTime[i] ?? 'Not Found',
+            time: subjectClassTime[i] ?? "Not Found",
           })
         );
       }
