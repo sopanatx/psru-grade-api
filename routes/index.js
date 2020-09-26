@@ -6,7 +6,9 @@ const queryString = require("query-string");
 const iconv = require("iconv-lite");
 const cheerio = require("cheerio");
 const HtmlTableToJson = require("html-table-to-json");
-const { json } = require("express");
+const {
+  json
+} = require("express");
 /* GET home page. */
 router.get("/", function (req, res, next) {
   res.render("index", {
@@ -32,7 +34,9 @@ router.get("/grade/:id", async (req, res) => {
   };
 
   try {
-    const { data: studentGrade } = await axios.post(
+    const {
+      data: studentGrade
+    } = await axios.post(
       "http://202.29.80.113/cgi/LstGrade1.pl",
       queryString.stringify(requestBody),
       config
@@ -119,9 +123,16 @@ router.get("/api/grade/:id", async function (req, res) {
       for (let i = 1; i < scrappedTable.length / 7; i++) {
         GroupGrade.push(scrappedTable.slice(i * 7, i * 7 + 7));
       }
-
-      //console.log('GroupGrade Length: ', GroupGrade.length);
-      //console.log(JSON.stringify(Object.assign({}, GroupGrade)));
+      let TotalCalulateGrade = []
+      const TotalCalculateScrapped = $('body > center > table > tbody > tr > td > font > center:nth-child(2) > table > tbody > tr > td > font:nth-child(3)').each((index, element) => {
+        const convertTotalCalculate = $(element).text().split(' ', 10)
+        console.log(convertTotalCalculate)
+        TotalCalulateGrade.push(Object.assign({
+          TotalCredit: convertTotalCalculate[1],
+          TotalAverageGrade: convertTotalCalculate[5],
+          TotalMainSubjectGrade: convertTotalCalculate[8].substr(0, 4)
+        }))
+      })
       let StudentGrade = [];
       for (let j = 0; j < GroupGrade.length; j++) {
         StudentGrade.push(
@@ -139,6 +150,7 @@ router.get("/api/grade/:id", async function (req, res) {
 
       res.send({
         studentInfo,
+        TotalCalulateGrade,
         StudentGrade,
       });
     });
