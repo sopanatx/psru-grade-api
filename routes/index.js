@@ -14,7 +14,7 @@ router.get("/", function (req, res, next) {
   });
 });
 
-router.get("/grade/:id", async (req, res)=> {
+router.get("/grade/:id", async (req, res) => {
   console.log(req.params);
   const requestBody = {
     ID_NO: req.params.id,
@@ -31,21 +31,19 @@ router.get("/grade/:id", async (req, res)=> {
     responseEncoding: "binary",
   };
 
-   try {
-    const {data:studentGrade} = await axios
-    .post(
+  try {
+    const { data: studentGrade } = await axios.post(
       "http://202.29.80.113/cgi/LstGrade1.pl",
       queryString.stringify(requestBody),
       config
-    )
+    );
     res.status(200).send(iconv.decode(new Buffer(studentGrade), "TIS-620"));
-   } catch (error) {
-     res.status(500).send("StudentGrade Request Fail")
-   }
-  
+  } catch (error) {
+    res.status(500).send("StudentGrade Request Fail");
+  }
 });
 
-router.get("/activity/:id", function (req, res) {
+router.get("/activity/:id", async (req, res) => {
   const requestBody = {
     search_val: req.params.id,
   };
