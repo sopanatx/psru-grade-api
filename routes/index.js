@@ -128,9 +128,9 @@ router.get("/api/grade/:id", async function (req, res) {
         const convertTotalCalculate = $(element).text().split(' ', 10)
         console.log(convertTotalCalculate)
         TotalCalculateGrade.push(Object.assign({
-          TotalCredit: convertTotalCalculate[1],
-          TotalAverageGrade: convertTotalCalculate[5],
-          TotalMainSubjectGrade: convertTotalCalculate[8].substr(0, 4)
+          TotalCredit: Number(convertTotalCalculate[1]),
+          TotalAverageGrade: Number(convertTotalCalculate[5]),
+          TotalMainSubjectGrade: Number(convertTotalCalculate[8].substr(0, 4))
         }))
       })
       let StudentGrade = [];
