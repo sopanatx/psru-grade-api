@@ -118,10 +118,10 @@ router.get("/api/grade/:id", async function (req, res) {
           })
         );
       });
-      const GroupGrade = [];
+      const groupGrade = [];
 
       for (let i = 1; i < scrappedTable.length / 7; i++) {
-        GroupGrade.push(scrappedTable.slice(i * 7, i * 7 + 7));
+        groupGrade.push(scrappedTable.slice(i * 7, i * 7 + 7));
       }
       let TotalCalculateGrade = []
       const TotalCalculateScrapped = $('body > center > table > tbody > tr > td > font > center:nth-child(2) > table > tbody > tr > td > font:nth-child(3)').each((index, element) => {
@@ -134,16 +134,16 @@ router.get("/api/grade/:id", async function (req, res) {
         }))
       })
       let StudentGrade = [];
-      for (let j = 0; j < GroupGrade.length; j++) {
+      for (let j = 0; j < groupGrade.length; j++) {
         StudentGrade.push(
           Object.assign({
-            term: GroupGrade[j][0],
-            section: GroupGrade[j][1],
-            subjectCode: GroupGrade[j][2],
-            subjectName: GroupGrade[j][3],
-            credit: GroupGrade[j][4],
-            studentGrade: GroupGrade[j][5],
-            subjectGroup: GroupGrade[j][6],
+            term: groupGrade[j][0],
+            section: groupGrade[j][1],
+            subjectCode: groupGrade[j][2],
+            subjectName: groupGrade[j][3],
+            credit: groupGrade[j][4],
+            studentGrade: groupGrade[j][5],
+            subjectGroup: groupGrade[j][6],
           })
         );
       }
