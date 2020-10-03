@@ -8,7 +8,7 @@ var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var app = express();
 const serverless = require("serverless-http");
-var http = require("http");
+const http = require("http");
 const helmet = require("helmet");
 const {
   hidePoweredBy
