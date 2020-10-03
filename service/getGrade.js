@@ -1,6 +1,6 @@
 const axios = require('axios');
 async function getGrade(studentId) {
-      const studentGrade = await  axios({
+      const studentGrade = await axios({
   method: 'post',
   url: 'http://202.29.80.113/cgi/LstGrade1.pl',
   data: {
