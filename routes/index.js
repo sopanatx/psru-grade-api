@@ -6,9 +6,7 @@ const queryString = require("query-string");
 const iconv = require("iconv-lite");
 const cheerio = require("cheerio");
 const HtmlTableToJson = require("html-table-to-json");
-const {
-  json
-} = require("express");
+const { json } = require("express");
 /* GET home page. */
 router.get("/", function (req, res, next) {
   res.render("index", {
@@ -34,9 +32,7 @@ router.get("/grade/:id", async (req, res) => {
   };
 
   try {
-    const {
-      data: studentGrade
-    } = await axios.post(
+    const { data: studentGrade } = await axios.post(
       "http://202.29.80.113/cgi/LstGrade1.pl",
       queryString.stringify(requestBody),
       config
@@ -123,16 +119,22 @@ router.get("/api/grade/:id", async function (req, res) {
       for (let i = 1; i < scrappedTable.length / 7; i++) {
         groupGrade.push(scrappedTable.slice(i * 7, i * 7 + 7));
       }
-      let TotalCalculateGrade = []
-      const TotalCalculateScrapped = $('body > center > table > tbody > tr > td > font > center:nth-child(2) > table > tbody > tr > td > font:nth-child(3)').each((index, element) => {
-        const convertTotalCalculate = $(element).text().split(' ', 10)
-        console.log(convertTotalCalculate)
-        TotalCalculateGrade.push(Object.assign({
-          TotalCredit: Number(convertTotalCalculate[1]),
-          TotalAverageGrade: Number(convertTotalCalculate[5]),
-          TotalMainSubjectGrade: Number(convertTotalCalculate[8].substr(0, 4))
-        }))
-      })
+      let TotalCalculateGrade = [];
+      const TotalCalculateScrapped = $(
+        "body > center > table > tbody > tr > td > font > center:nth-child(2) > table > tbody > tr > td > font:nth-child(3)"
+      ).each((index, element) => {
+        const convertTotalCalculate = $(element).text().split(" ", 10);
+        console.log(convertTotalCalculate);
+        TotalCalculateGrade.push(
+          Object.assign({
+            TotalCredit: Number(convertTotalCalculate[1]),
+            TotalAverageGrade: Number(convertTotalCalculate[5]),
+            TotalMainSubjectGrade: Number(
+              convertTotalCalculate[8].substr(0, 4)
+            ),
+          })
+        );
+      });
       let StudentGrade = [];
       for (let j = 0; j < groupGrade.length; j++) {
         StudentGrade.push(
@@ -316,7 +318,7 @@ router.get("/api/class/:id", async function (req, res) {
               });
             });
           }
-        }); //end monday3
+        });
 
         const tuesday3 = $(
           `body > center > table > tbody > tr:nth-child(${i}) > td:nth-child(7)`
@@ -354,7 +356,7 @@ router.get("/api/class/:id", async function (req, res) {
               });
             });
           }
-        }); //end tuesday3
+        });
 
         const wednesday3 = $(
           `body > center > table > tbody > tr:nth-child(${i}) > td:nth-child(8)`
@@ -392,7 +394,7 @@ router.get("/api/class/:id", async function (req, res) {
               });
             });
           }
-        }); //end wednesday3
+        });
 
         const thursday3 = $(
           `body > center > table > tbody > tr:nth-child(${i}) > td:nth-child(9)`
@@ -429,7 +431,7 @@ router.get("/api/class/:id", async function (req, res) {
               });
             });
           }
-        }); //end thursday3
+        });
 
         const friday3 = $(
           `body > center > table > tbody > tr:nth-child(${i}) > td:nth-child(10)`
@@ -448,31 +450,27 @@ router.get("/api/class/:id", async function (req, res) {
               ).each((indexroom, elementroom) => {
                 const fridayClass = $(
                   ` body > center > table > tbody > tr:nth-child(${i}) > td:nth-child(3)`
-                ).each((indexclass, elementclass) =>
-                  //  console.log('Element Subject: %s  Element Time: %s Element SubjectName: %s  Element Classroom : %s', $(elementsubcode).text(), formattedTime, $(elementclass).text(), $(elementroom).text())
-                  {
-                    const fridayTeacher = $(
-                      ` body > center > table > tbody > tr:nth-child(${i}) > td:nth-child(11)`
-                    ).each((indexteacher, elementteacher) => {
-                      friday.push(
-                        Object.assign({
-                          subjectCode: $(elementsubcode).text(),
-                          subjectName: $(elementclass).text(),
-                          subjectClassroom: $(elementroom).text(),
-                          subjectTime: formattedTime,
-                          subjectTeacher: $(elementteacher).text(),
-                        })
-                      );
-                    });
-                  }
-                );
+                ).each((indexclass, elementclass) => {
+                  const fridayTeacher = $(
+                    ` body > center > table > tbody > tr:nth-child(${i}) > td:nth-child(11)`
+                  ).each((indexteacher, elementteacher) => {
+                    friday.push(
+                      Object.assign({
+                        subjectCode: $(elementsubcode).text(),
+                        subjectName: $(elementclass).text(),
+                        subjectClassroom: $(elementroom).text(),
+                        subjectTime: formattedTime,
+                        subjectTeacher: $(elementteacher).text(),
+                      })
+                    );
+                  });
+                });
               });
             });
           }
-        }); //end friday3
+        });
       }
 
-      //send data to user
       res.send({
         monday: monday,
         tuesday: tuesday,
