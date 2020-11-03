@@ -6,12 +6,11 @@ const iconv = require("iconv-lite");
 const cheerio = require("cheerio");
 const HtmlTableToJson = require("html-table-to-json");
 const { json } = require("express");
-const { Unauthorized } = require("http-errors");
+const { Unauthorized, Forbidden } = require("http-errors");
+const { checkIsAssess } = require("../service/Grade");
 /* GET home page. */
 router.get("/", function (req, res, next) {
-  res.render("index", {
-    title: "Express",
-  });
+  res.send(new Forbidden());
 });
 
 router.get("/grade/:id", async (req, res) => {
@@ -24,6 +23,12 @@ router.get("/grade/:id", async (req, res) => {
   const requestBody = {
     ID_NO: req.params.id,
   };
+
+  if (!(await checkIsAssess(req.params.id))) {
+    res.send(
+      "ไม่สามารถแสดงผลการเรียนได้ เนื่องจากท่านประเมินการสอนออนไลน์ยังไม่ครบทุกรายวิชาในเทอมนี้."
+    );
+  }
   const config = {
     header: {
       Origin: "https://api.itpsru.in.th/",
@@ -55,37 +60,7 @@ router.get("/is_assess/:id", async (req, res) => {
   } else if (req.params.id.length > 10) {
     res.status(400).send(new Unauthorized("StudentID Length Must be equal 10"));
   }
-  const requestBody = {
-    ID_NO: req.params.id,
-  };
-  const config = {
-    header: {
-      Origin: "https://api.itpsru.in.th/",
-      "Content-Type": "application/x-www-form-urlencoded",
-      Referer: "https://api.itpsru.in.th/",
-      "Accept-Encoding": "gzip, deflate",
-      "Accept-Language": "th-GB,th;q=0.9,en-GB;q=0.8,en;q=0.7,th-TH;q=0.6",
-    },
-    responseType: "arraybuffer",
-    responseEncoding: "binary",
-  };
-
-  try {
-    const { data: studentGrade } = await axios.post(
-      "http://202.29.80.113/cgi/LstGrade1.pl",
-      queryString.stringify(requestBody),
-      config
-    );
-    const convertText = iconv.decode(new Buffer.from(studentGrade), "TIS-620");
-    const $ = cheerio.load(convertText);
-    const waitingAssessMsg =
-      "ท่านประเมินการสอนออนไลน์ยังไม่ครบทุกรายวิชาในเทอมนี้ กรุณาประเมินให้ครบทุกรายวิชา ท่านจึงจะสามารถดูเกรดได้ไปยังหน้าประเมินการสอนออนไลน์ คลิกที่นี่";
-    const getWaitingMsg = $("body > span > center").text();
-    console.log({ waitingAssessMsg, getWaitingMsg });
-    res.send(waitingAssessMsg == getWaitingMsg);
-  } catch (error) {
-    res.status(500).send("StudentGrade Request Fail");
-  }
+  res.send(await checkIsAssess(req.params.id));
 });
 
 router.get("/activity/:id", async (req, res) => {
@@ -122,6 +97,17 @@ router.get("/api/grade/:id", async function (req, res) {
   const requestBody = {
     ID_NO: req.params.id,
   };
+  if (!(await checkIsAssess(req.params.id))) {
+    res.send(
+      Unauthorized({
+        errorCode: 1001,
+        errorMessage: "API_GRADE_ASSESS_ERROR",
+        th:
+          "ไม่สามารถแสดงผลการเรียนได้ เนื่องจากท่านประเมินการสอนออนไลน์ยังไม่ครบทุกรายวิชาในเทอมนี้.",
+        en: "",
+      })
+    );
+  }
   const config = {
     header: {
       Origin: "https://api.itpsru.in.th/",
