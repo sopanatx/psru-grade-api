@@ -17,9 +17,9 @@ router.get("/", function (req, res, next) {
 router.get("/grade/:id", async (req, res) => {
   console.log(req.params);
   if (req.params.id.length < 9) {
-    res.status(400).send(new Unauthorized("Student Length Must be equal 10"));
+    res.status(400).send(new Unauthorized("StudentID Length Must be equal 10"));
   } else if (req.params.id.length > 10) {
-    res.status(400).send(new Unauthorized("Student Length Must be equal 10"));
+    res.status(400).send(new Unauthorized("StudentID Length Must be equal 10"));
   }
   const requestBody = {
     ID_NO: req.params.id,
@@ -51,9 +51,9 @@ router.get("/grade/:id", async (req, res) => {
 router.get("/is_assess/:id", async (req, res) => {
   console.log(req.params);
   if (req.params.id.length < 9) {
-    res.status(400).send(new Unauthorized("Student Length Must be equal 10"));
+    res.status(400).send(new Unauthorized("StudentID Length Must be equal 10"));
   } else if (req.params.id.length > 10) {
-    res.status(400).send(new Unauthorized("Student Length Must be equal 10"));
+    res.status(400).send(new Unauthorized("StudentID Length Must be equal 10"));
   }
   const requestBody = {
     ID_NO: req.params.id,
@@ -114,9 +114,9 @@ router.get("/activity/:id", async (req, res) => {
 
 router.get("/api/grade/:id", async function (req, res) {
   if (req.params.id.length < 9) {
-    res.status(400).send(new Unauthorized("Student Length Must be equal 10"));
+    res.status(400).send(new Unauthorized("StudentID Length Must be equal 10"));
   } else if (req.params.id.length > 10) {
-    res.status(400).send(new Unauthorized("Student Length Must be equal 10"));
+    res.status(400).send(new Unauthorized("StudentID Length Must be equal 10"));
   }
   console.log(req.params);
   const requestBody = {
