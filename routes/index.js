@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const getGrade = require("../service/getGrade");
 const axios = require("axios");
 const queryString = require("query-string");
 const iconv = require("iconv-lite");
 const cheerio = require("cheerio");
 const HtmlTableToJson = require("html-table-to-json");
 const { json } = require("express");
+const { Unauthorized } = require("http-errors");
 /* GET home page. */
 router.get("/", function (req, res, next) {
   res.render("index", {
@@ -16,6 +16,11 @@ router.get("/", function (req, res, next) {
 
 router.get("/grade/:id", async (req, res) => {
   console.log(req.params);
+  if (req.params.id.length < 9) {
+    res.status(400).send(new Unauthorized("Student Length Must be equal 10"));
+  } else if (req.params.id.length > 10) {
+    res.status(400).send(new Unauthorized("Student Length Must be equal 10"));
+  }
   const requestBody = {
     ID_NO: req.params.id,
   };
@@ -38,6 +43,46 @@ router.get("/grade/:id", async (req, res) => {
       config
     );
     res.status(200).send(iconv.decode(new Buffer(studentGrade), "TIS-620"));
+  } catch (error) {
+    res.status(500).send("StudentGrade Request Fail");
+  }
+});
+
+router.get("/is_assess/:id", async (req, res) => {
+  console.log(req.params);
+  if (req.params.id.length < 9) {
+    res.status(400).send(new Unauthorized("Student Length Must be equal 10"));
+  } else if (req.params.id.length > 10) {
+    res.status(400).send(new Unauthorized("Student Length Must be equal 10"));
+  }
+  const requestBody = {
+    ID_NO: req.params.id,
+  };
+  const config = {
+    header: {
+      Origin: "https://api.itpsru.in.th/",
+      "Content-Type": "application/x-www-form-urlencoded",
+      Referer: "https://api.itpsru.in.th/",
+      "Accept-Encoding": "gzip, deflate",
+      "Accept-Language": "th-GB,th;q=0.9,en-GB;q=0.8,en;q=0.7,th-TH;q=0.6",
+    },
+    responseType: "arraybuffer",
+    responseEncoding: "binary",
+  };
+
+  try {
+    const { data: studentGrade } = await axios.post(
+      "http://202.29.80.113/cgi/LstGrade1.pl",
+      queryString.stringify(requestBody),
+      config
+    );
+    const convertText = iconv.decode(new Buffer.from(studentGrade), "TIS-620");
+    const $ = cheerio.load(convertText);
+    const waitingAssessMsg =
+      "ท่านประเมินการสอนออนไลน์ยังไม่ครบทุกรายวิชาในเทอมนี้ กรุณาประเมินให้ครบทุกรายวิชา ท่านจึงจะสามารถดูเกรดได้ไปยังหน้าประเมินการสอนออนไลน์ คลิกที่นี่";
+    const getWaitingMsg = $("body > span > center").text();
+    console.log({ waitingAssessMsg, getWaitingMsg });
+    res.send(waitingAssessMsg == getWaitingMsg);
   } catch (error) {
     res.status(500).send("StudentGrade Request Fail");
   }
@@ -68,6 +113,11 @@ router.get("/activity/:id", async (req, res) => {
 });
 
 router.get("/api/grade/:id", async function (req, res) {
+  if (req.params.id.length < 9) {
+    res.status(400).send(new Unauthorized("Student Length Must be equal 10"));
+  } else if (req.params.id.length > 10) {
+    res.status(400).send(new Unauthorized("Student Length Must be equal 10"));
+  }
   console.log(req.params);
   const requestBody = {
     ID_NO: req.params.id,
