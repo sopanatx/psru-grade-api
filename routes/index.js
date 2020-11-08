@@ -8,6 +8,7 @@ const HtmlTableToJson = require("html-table-to-json");
 const { json } = require("express");
 const { Unauthorized, Forbidden } = require("http-errors");
 const { checkIsAssess } = require("../service/Grade");
+const { convertDayPeriodType } = require("../utils/misc");
 /* GET home page. */
 router.get("/", function (req, res, next) {
   res.send(new Forbidden());
@@ -322,9 +323,11 @@ router.get("/api/class/:id", async function (req, res) {
           if ($(element).text().trim() == "") {
             element == "null";
           } else {
-            const formattedTime = `จันทร์ ${convertPeriod1(
+            const formattedTime = `จันทร์ เวลา: ${convertPeriod1(
               $(element).text().substr(0, 1)
             )} - ${convertPeriod2($(element).text().substr(2, 3))}`;
+            const startTime = $(element).text().substr(0, 1);
+            const endTime = $(element).text().substr(2, 3);
 
             const mondaySubID = $(
               `body > center > table > tbody > tr:nth-child(${i}) > td:nth-child(1)`
@@ -345,6 +348,10 @@ router.get("/api/class/:id", async function (req, res) {
                         subjectClassroom: $(elementroom).text(),
                         subjectTime: formattedTime,
                         subjectTeacher: $(elementteacher).text(),
+                        subjectPeriodType: convertDayPeriodType(
+                          startTime,
+                          endTime
+                        ),
                       })
                     );
                   });
@@ -360,10 +367,11 @@ router.get("/api/class/:id", async function (req, res) {
           if ($(element).text().trim() == "") {
             element == "null";
           } else {
-            const formattedTime = `อังคาร ${convertPeriod1(
+            const formattedTime = `อังคาร เวลา: ${convertPeriod1(
               $(element).text().substr(0, 1)
             )} - ${convertPeriod2($(element).text().substr(2, 3))}`;
-
+            const startTime = $(element).text().substr(0, 1);
+            const endTime = $(element).text().substr(2, 3);
             const tuesdaySubID = $(
               `body > center > table > tbody > tr:nth-child(${i}) > td:nth-child(1)`
             ).each((indexsubcode, elementsubcode) => {
@@ -383,6 +391,10 @@ router.get("/api/class/:id", async function (req, res) {
                         subjectClassroom: $(elementroom).text(),
                         subjectTime: formattedTime,
                         subjectTeacher: $(elementteacher).text(),
+                        subjectPeriodType: convertDayPeriodType(
+                          startTime,
+                          endTime
+                        ),
                       })
                     );
                   });
@@ -398,10 +410,11 @@ router.get("/api/class/:id", async function (req, res) {
           if ($(element).text().trim() == "") {
             element == "null";
           } else {
-            const formattedTime = `พุธ ${convertPeriod1(
+            const formattedTime = `พุธ เวลา: ${convertPeriod1(
               $(element).text().substr(0, 1)
             )} - ${convertPeriod2($(element).text().substr(2, 3))}`;
-
+            const startTime = $(element).text().substr(0, 1);
+            const endTime = $(element).text().substr(2, 3);
             const wednesdaySubID = $(
               `body > center > table > tbody > tr:nth-child(${i}) > td:nth-child(1)`
             ).each((indexsubcode, elementsubcode) => {
@@ -421,6 +434,10 @@ router.get("/api/class/:id", async function (req, res) {
                         subjectClassroom: $(elementroom).text(),
                         subjectTime: formattedTime,
                         subjectTeacher: $(elementteacher).text(),
+                        subjectPeriodType: convertDayPeriodType(
+                          startTime,
+                          endTime
+                        ),
                       })
                     );
                   });
@@ -436,9 +453,11 @@ router.get("/api/class/:id", async function (req, res) {
           if ($(element).text().trim() == "") {
             element == "null";
           } else {
-            const formattedTime = `พฤหัสบดี ${convertPeriod1(
+            const formattedTime = `พฤหัสบดี เวลา: ${convertPeriod1(
               $(element).text().substr(0, 1)
             )} - ${convertPeriod2($(element).text().substr(2, 3))}`;
+            const startTime = $(element).text().substr(0, 1);
+            const endTime = $(element).text().substr(2, 3);
             const thursdaySubID = $(
               `body > center > table > tbody > tr:nth-child(${i}) > td:nth-child(1)`
             ).each((indexsubcode, elementsubcode) => {
@@ -458,6 +477,10 @@ router.get("/api/class/:id", async function (req, res) {
                         subjectClassroom: $(elementroom).text(),
                         subjectTime: formattedTime,
                         subjectTeacher: $(elementteacher).text(),
+                        subjectPeriodType: convertDayPeriodType(
+                          startTime,
+                          endTime
+                        ),
                       })
                     );
                   });
@@ -473,9 +496,11 @@ router.get("/api/class/:id", async function (req, res) {
           if ($(element).text().trim() == "") {
             element == "null";
           } else {
-            const formattedTime = `ศุกร์ ${convertPeriod1(
+            const formattedTime = `ศุกร์ เวลา: ${convertPeriod1(
               $(element).text().substr(0, 1)
             )} - ${convertPeriod2($(element).text().substr(2, 3))}`;
+            const startTime = $(element).text().substr(0, 1);
+            const endTime = $(element).text().substr(2, 3);
             const fridaySubID = $(
               `body > center > table > tbody > tr:nth-child(${i}) > td:nth-child(1)`
             ).each((indexsubcode, elementsubcode) => {
@@ -495,6 +520,10 @@ router.get("/api/class/:id", async function (req, res) {
                         subjectClassroom: $(elementroom).text(),
                         subjectTime: formattedTime,
                         subjectTeacher: $(elementteacher).text(),
+                        subjectPeriodType: convertDayPeriodType(
+                          startTime,
+                          endTime
+                        ),
                       })
                     );
                   });
