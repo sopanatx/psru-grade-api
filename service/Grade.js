@@ -29,7 +29,7 @@ async function checkIsAssess(studentId) {
     const waitingAssessMsg =
       "ท่านประเมินการสอนออนไลน์ยังไม่ครบทุกรายวิชาในเทอมนี้ กรุณาประเมินให้ครบทุกรายวิชา ท่านจึงจะสามารถดูเกรดได้ไปยังหน้าประเมินการสอนออนไลน์ คลิกที่นี่ ";
     const getWaitingMsg = $("body > span > center").text();
-    console.log({ waitingAssessMsg, getWaitingMsg });
+    // console.log({ waitingAssessMsg, getWaitingMsg });
     return waitingAssessMsg != getWaitingMsg;
   } catch (error) {
     return error;
