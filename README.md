@@ -1,6 +1,6 @@
 # psru-grade-api
 Node.js web scraping for convert psru website html to json api.
 
-You can test at : https://gazw5fi7d2.execute-api.ap-southeast-1.amazonaws.com/production/api/grade/{student_id}
+Production Url : https://app.itpsru.in.th/
 
 Node.js Project สำหรับแปลงหน้าเว็บแสดงผลการเรียนให้เป็น HTML หรือ JSON ของมหาวิทยาลัยราชภัฏพิบูลสงคราม
