@@ -64,7 +64,7 @@ router.get("/is_assess/:id", async (req, res) => {
   res.send(await checkIsAssess(req.params.id));
 });
 
-router.get("/activity/:id", async (req, res) => {
+router.get("/api/activity/:id", async (req, res) => {
   const requestBody = {
     search_val: req.params.id,
   };
