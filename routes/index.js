@@ -84,7 +84,64 @@ router.get("/activity/:id", async (req, res) => {
       config
     )
     .then((result) => {
-      res.status(200).send(result.data);
+      let activityTable = [];
+
+      const $ = cheerio.load(result.data);
+      const studentYear = +req.params.id.slice(0, 2);
+      let d = new Date();
+      let currentYear = +d.getFullYear().toString().slice(0, 2) + 43;
+      let loopCount = currentYear - studentYear + 1;
+      console.log({ loopCount });
+      // switch()
+
+      const rowCount =
+        $("#tab3 > p > strong > span > table > tbody > tr").length - 1;
+      let activityYear1 = [
+        {
+          year: 2561,
+          needJoined: 16,
+          hasJoined: 16,
+        },
+      ];
+      let activityYear2 = [];
+      let activityYear3 = [];
+      let activityYear4 = [];
+      console.log({ rowCount });
+
+      switch (loopCount) {
+        case 3:
+          for (let i = 1; i <= rowCount; i++) {
+            activityYear1.push(
+              Object.assign({
+                activityId: i,
+                activityName: $(
+                  `#tab3 > p > strong > span > table > tbody > tr:nth-child(${
+                    i + 1
+                  }) > th:nth-child(2)`
+                )
+                  .text()
+                  .substr(16, 70),
+                //
+                activityDate: $(
+                  `#tab3 > p > strong > span > table > tbody > tr:nth-child(${
+                    i + 1
+                  }) > td:nth-child(4) > font > b`
+                ).text(),
+                activityStatus: $(
+                  `#tab3 > p > strong > span > table > tbody > tr:nth-child(${
+                    i + 1
+                  }) > td:nth-child(5) > center > strong > font`
+                )
+                  .text()
+                  .trim(),
+              })
+            );
+          }
+          break;
+      }
+      console.log(activityYear1);
+      res.send({ activityYear1 });
+      //res.status(200).send(result.data);
     });
 });
 
