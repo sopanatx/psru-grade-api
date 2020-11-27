@@ -46,7 +46,10 @@ router.get("/grade/:id", async (req, res) => {
     const { data: studentGrade } = await axios.post(
       "http://202.29.80.113/cgi/LstGrade1.pl",
       queryString.stringify(requestBody),
-      config
+      config,
+      {
+        timeout: 8000,
+      }
     );
     res.status(200).send(iconv.decode(new Buffer(studentGrade), "TIS-620"));
   } catch (error) {
@@ -887,17 +890,30 @@ router.get("/api/class/:id", async function (req, res) {
 router.get("/class/:id", async function (req, res) {
   console.log("[Request_Params: %s]", req.params.id);
 
-  const requestBody = {
-    ID_NO: req.params.id,
-  };
-  const scrappedTable = [];
-  const getTable = await axios
-    .post(
-      "http://202.29.80.113/cgi/LoadTB1.php",
-      queryString.stringify(requestBody)
-    )
-    .then((result) => {
-      res.send(result.data);
+  try {
+    const requestBody = {
+      ID_NO: req.params.id,
+    };
+    const scrappedTable = [];
+    const getTable = await axios
+      .post(
+        "http://202.29.80.113/cgi/LoadTB1.php",
+
+        queryString.stringify(requestBody),
+        {
+          timeout: 8000,
+        }
+      )
+      .then((result) => {
+        res.send(result.data);
+      });
+  } catch (e) {
+    res.json({
+      errorCode: 3001,
+      errorType: "ORIGIN_SERVER_TIMEOUT",
+      errorMessage:
+        "ระบบ API ไม่สามารถเชื่อมต่อเครื่องเซิร์ฟเวอร์แม่ข่าย / (REG_PSRU_WEBSITE) ได้.",
     });
+  }
 });
 module.exports = router;
