@@ -3,12 +3,12 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node app.js",
+    "start": "NODE_ENV=production && node app.js",
     "dev": "nodemon app.js"
   },
   "dependencies": {
     "axios": "^0.19.2",
-    "cheerio": "^1.0.0-rc.3",
+    "cheerio": "^1.0.0-rc.5",
     "cheerio-tableparser": "^1.0.1",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
@@ -21,7 +21,7 @@
     "morgan": "~1.9.1",
     "nodemon": "^2.0.6",
     "osmosis": "^1.1.10",
-    "query-string": "^6.13.6",
+    "query-string": "^6.13.7",
     "serverless-http": "^2.6.0",
     "table-to-json": "^1.0.0",
     "windows-874": "^1.0.0"
