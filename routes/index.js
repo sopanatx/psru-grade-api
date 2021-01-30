@@ -13,7 +13,7 @@ const {
   BadRequest,
 } = require("http-errors");
 const { checkIsAssess, getGrade } = require("../service/Grade");
-const { getClass } = require("../service/Class");
+const { getClass, getRawClassData } = require("../service/Class");
 const { getBilling } = require("../service/Billing");
 const { getActivity } = require("../service/activity");
 
@@ -139,14 +139,6 @@ router.get(
         .json({ errorCode: 400, message: "API_KEY MISMATCHED" });
     }
     const { classID } = req.body;
-    async function removeElement(array, elem) {
-      var index = array.indexOf(elem);
-      if (index > -1) {
-        array.splice(index, 1);
-      }
-      return array;
-    }
-
     console.log("[Request_Params: %s]", classID);
     const response = await getClass(classID, uuidv4());
     res.status(200).send(response);
@@ -154,33 +146,8 @@ router.get(
 );
 
 router.get("/class/:id", async function (req, res) {
-  console.log("[Request_Params: %s]", req.params.id);
-
-  try {
-    const requestBody = {
-      ID_NO: req.params.id,
-    };
-    const scrappedTable = [];
-    const getTable = await axios
-      .post(
-        "http://202.29.80.113/cgi/LoadTB1.php",
-
-        queryString.stringify(requestBody),
-        {
-          timeout: 8000,
-        }
-      )
-      .then((result) => {
-        res.send(result.data);
-      });
-  } catch (e) {
-    res.json({
-      errorCode: 3001,
-      errorType: "ORIGIN_SERVER_TIMEOUT",
-      errorMessage:
-        "ระบบ API ไม่สามารถเชื่อมต่อเครื่องเซิร์ฟเวอร์แม่ข่าย / (REG_PSRU_WEBSITE) ได้.",
-    });
-  }
+  const response = await getRawClassData(req.params.id);
+  res.send(response);
 });
 
 router.get("/api/billing", async (req, res) => {

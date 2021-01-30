@@ -346,6 +346,37 @@ async function getClass(classID, requestId) {
   };
 }
 
+async function getRawClassData(classId) {
+  console.log("[Request_Params: %s]", classId);
+  let data;
+  try {
+    const requestBody = {
+      ID_NO: classId,
+    };
+    const scrappedTable = [];
+    return await axios
+      .post(
+        "http://202.29.80.113/cgi/LoadTB1.php",
+
+        queryString.stringify(requestBody),
+        {
+          timeout: 8000,
+        }
+      )
+      .then((result) => {
+        return result.data;
+      });
+  } catch (e) {
+    return {
+      errorCode: 3001,
+      errorType: "ORIGIN_SERVER_TIMEOUT",
+      errorMessage:
+        "ระบบ API ไม่สามารถเชื่อมต่อเครื่องเซิร์ฟเวอร์แม่ข่าย / (REG_PSRU_WEBSITE) ได้.",
+    };
+  }
+}
+
 module.exports = {
   getClass,
+  getRawClassData,
 };
