@@ -125,7 +125,7 @@ async function getGrade(studentId, semester, requestId) {
                 currentSemesterCount + 1 &&
                 StudentGrade.push(
                   Object.assign({
-                    id: `${j}`,
+                    id: `${j + 1}`,
                     section: groupGrade[j][1],
                     subjectCode: groupGrade[j][2],
                     subjectName: groupGrade[j][3],
@@ -149,6 +149,7 @@ async function getGrade(studentId, semester, requestId) {
         };
         return {
           requestId: requestId,
+          updatedAt: Date.now(),
           studentInfo,
           semesterInfo,
           TotalCalculateGrade,
@@ -160,7 +161,92 @@ async function getGrade(studentId, semester, requestId) {
   }
 }
 
+async function getSemseter(studentId, requestId) {
+  var data = {};
+  const requestBody = {
+    ID_NO: studentId,
+  };
+  const config = {
+    header: {
+      Origin: "https://api.itpsru.in.th/",
+      "Content-Type": "application/x-www-form-urlencoded",
+      Referer: "https://api.itpsru.in.th/",
+      "Accept-Encoding": "gzip, deflate",
+      "Accept-Language": "th-GB,th;q=0.9,en-GB;q=0.8,en;q=0.7,th-TH;q=0.6",
+    },
+    responseType: "arraybuffer",
+    responseEncoding: "binary",
+  };
+  if (!(await checkIsAssess(studentId))) {
+    res.status(403).json({
+      errorCode: 1001,
+      errorMessage: "API_GRADE_ASSESS_ERROR",
+      th:
+        "ไม่สามารถแสดงผลการเรียนได้ เนื่องจากท่านประเมินการสอนออนไลน์ยังไม่ครบทุกรายวิชาในเทอมนี้.",
+    });
+  } else {
+    const studentGrade = axios
+      .post(
+        "http://202.29.80.113/cgi/LstGrade1.pl",
+        queryString.stringify(requestBody),
+        config
+      )
+      .then((result) => {
+        const html = iconv.decode(new Buffer.from(result.data), "TIS-620");
+        const $ = cheerio.load(html);
+        const scrappedTable = [];
+        const gradeTable = $(
+          "body > center > table > tbody > tr > td > font > center:nth-child(2) > table > tbody > tr > td > table > tbody > tr > td"
+        ).each((index, element) => {
+          scrappedTable.push($(element).text());
+        });
+        //   console.log(scrappedTable);
+        let studentInfo = {};
+        $(
+          "body > center > table > tbody > tr > td > font > center:nth-child(2) > table > tbody > tr > td > font:nth-child(1) > center"
+        ).each((index, element) => {
+          let parseinfo = $(element).text().split(" ", 20);
+          studentInfo = {
+            studentId: +parseinfo[1],
+            studentFirstName: parseinfo[4],
+            studentLastName: parseinfo[6],
+            graduatedFrom: parseinfo[8],
+            enrollYear: parseinfo[13],
+            major: parseinfo[17],
+            studentGroup: +parseinfo[19],
+          };
+        });
+        const groupGrade = [];
+
+        for (let i = 1; i < scrappedTable.length / 7; i++) {
+          groupGrade.push(scrappedTable.slice(i * 7, i * 7 + 7));
+        }
+
+        let availableSemesterData = [];
+        const semesterInfo = {
+          availableSemesterData,
+        };
+
+        for (let j = 0; j < groupGrade.length; j++) {
+          availableSemesterData.indexOf(`${groupGrade[j][0]}`) != -1
+            ? null
+            : availableSemesterData.push(groupGrade[j][0]);
+        }
+
+        return {
+          requestId: requestId,
+          studentId,
+          semesterCount: availableSemesterData.length,
+          semesterInfo,
+        };
+      });
+    // console.log(await studentGrade);
+    return await studentGrade;
+  }
+}
+
 module.exports = {
   checkIsAssess,
   getGrade,
+  getSemseter,
 };
