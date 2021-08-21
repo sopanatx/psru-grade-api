@@ -101,20 +101,11 @@ router.post(
   "/api/grade/",
   body("studentId").isLength({ min: 10, max: 10 }),
   body("semester").isString().isLength({ min: 6, max: 10 }),
-  //body("session_key").isString(),
-  header("API_KEY").isString().isLength({ min: 2, max: 100 }),
 
   async function (req, res) {
     const errors = validationResult(req);
-    console.log(process.env.API_KEY, req.headers.api_key);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    } else if (req.headers.api_key != process.env.API_KEY) {
-      return res
-        .status(400)
-        .json({ errorCode: 400, message: "API_KEY MISMATCHED" });
-    }
-    const { studentId, semester, apiKey } = req.body;
+
+    const { studentId, semester } = req.body;
 
     const requestBody = {
       ID_NO: studentId,
@@ -128,20 +119,10 @@ router.post(
   "/api/last_semester/",
   body("studentId").isLength({ min: 10, max: 10 }),
   body("semester").isString().isLength({ min: 6, max: 10 }),
-  //body("session_key").isString(),
-  header("API_KEY").isString().isLength({ min: 2, max: 100 }),
 
   async function (req, res) {
     const errors = validationResult(req);
-    console.log(process.env.API_KEY, req.headers.api_key);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    } else if (req.headers.api_key != process.env.API_KEY) {
-      return res
-        .status(400)
-        .json({ errorCode: 400, message: "API_KEY MISMATCHED" });
-    }
-    const { studentId, semester, apiKey } = req.body;
+    const { studentId, semester } = req.body;
 
     const requestBody = {
       ID_NO: studentId,
@@ -154,20 +135,12 @@ router.post(
 router.post(
   "/api/available_semester",
   body("studentId").isLength({ min: 10, max: 10 }),
-  //body("session_key").isString(),
-  header("API_KEY").isString().isLength({ min: 2, max: 100 }),
 
   async function (req, res) {
     const errors = validationResult(req);
     console.log(process.env.API_KEY, req.headers.api_key);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    } else if (req.headers.api_key != process.env.API_KEY) {
-      return res
-        .status(400)
-        .json({ errorCode: 400, message: "API_KEY MISMATCHED" });
-    }
-    const { studentId, apiKey } = req.body;
+
+    const { studentId } = req.body;
 
     const requestBody = {
       ID_NO: studentId,
@@ -180,17 +153,9 @@ router.post(
 router.get(
   "/api/class",
   body("classID").isLength({ max: 30 }),
-  //body("session_key").isString(),
-  header("API_KEY").isString().isLength({ min: 2, max: 100 }),
+
   async function (req, res) {
     const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    } else if (req.headers.api_key != process.env.API_KEY) {
-      return res
-        .status(400)
-        .json({ errorCode: 400, message: "API_KEY MISMATCHED" });
-    }
     const { classID } = req.body;
     console.log("[Request_Params: %s]", classID);
     const response = await getClass(classID, uuidv4());
@@ -198,25 +163,4 @@ router.get(
   }
 );
 
-router.get("/class/:id", async function (req, res) {
-  const response = await getRawClassData(req.params.id);
-  // res.send(response);
-  res.send(Forbidden());
-});
-
-router.get("/api/billing", async (req, res) => {
-  res.send(new MethodNotAllowed());
-});
-
-router.post("/api/billing", async (req, res) => {
-  if (req.headers.api_key != process.env.API_KEY) {
-    return res
-      .status(400)
-      .json({ errorCode: 400, message: "API_KEY MISMATCHED" });
-  }
-  const { studentId, studentPassword } = req.body;
-  console.log(studentId, studentPassword);
-  const response = await getBilling(studentId, studentPassword, uuidv4());
-  res.send(response);
-});
 module.exports = router;
