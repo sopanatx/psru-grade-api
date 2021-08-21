@@ -111,6 +111,12 @@ router.post(
       ID_NO: studentId,
     };
     const response = await getGrade(studentId, semester, uuidv4());
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE");
+    res.setHeader(
+      "Access-Control-Allow-Headers",
+      "Content-Type, Authorisation"
+    );
     res.status(200).send(response);
   }
 );
